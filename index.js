@@ -19,7 +19,17 @@ function leerArchivo(nombreArchivo) {
     return datos;
 }
 
+function generarArchivoScotiaBank(nombreArchivo){
+    fs.appendFileSync(nombreArchivo,FIRSTLINE)
 
+    datos.forEach(element => {
+        fs.appendFileSync(nombreArchivo,TIPO+'|'+contrato(element)+'|'+NOMBREPLAZA+'   |'+NUMEROPLAZA+'|'+numeroSucursal(element)+'|'+
+                                          fecha(element)+'|'+fecha(element)+'|'+fecha(element)+'|'+indImporte(element)+'|'+
+                                          importeDocumento(element)+'|'+FORMADEPAGO+'|   |                '+INTERESESODESCUENTOS+'|'+
+                                          importeDocumento(element)+'|'+hora(element)+'|'+imp(element)+'|1000'+'noControl'+'referencia'+'|'+
+                                          fecha(element).replace(/\//g,'')+'|'+'Camberos Fregoso Valdez'+'|'+'Reinscripcion'+'                 ||'+'\n')
+    });
+}
 
 function contrato(dato){
     return dato.substring(0,16).trim() 
@@ -41,76 +51,63 @@ function clacon(dato){
     return dato.substring(32,36)
 }
 
-//-----------------------------------------------------------------------------------------------------------
 function descClacon(dato){
     return dato.substring(36,72).trim()
-    }
-    
-    function indImporte (dato){
+}
+
+function indImporte (dato){
     return dato.substring(72,73)
-    }
-    
-    function imp (dato){
+}
+
+function imp (dato){
     return '0'+dato.substring(74,88)
-    }
-    
-    function importeDocumento(dato){
-    var resultado = ' '
+}
+
+function importeDocumento(dato){
+    var resultado = '                     '
     var importeDocumento = ''
     var bandera = false;
     var importe = dato.substring(77,88)
-    for(var i = 0;i<importe.length;i++){ 
-    if(!(importe[i]=='0') && !bandera )
-    bandera = true
-    if(bandera){
-    importeDocumento += importe.substring(i);
-    break
+    for(var i = 0;i<importe.length;i++){  
+        if(!(importe[i]=='0') && !bandera )
+            bandera = true
+        if(bandera){
+            importeDocumento += importe.substring(i);
+            break
+        }
     }
-    }
+    
     var temp = '.'+importeDocumento.substring(importeDocumento.length-2)
     var j = 1
-    for(var i = importeDocumento.length-3;i>=0;i--){
-    temp = importeDocumento[i]+temp
-    if(j++%3==0 && i-1>=0 )
-    temp= ','+temp
+   for(var i = importeDocumento.length-3;i>=0;i--){
+       temp = importeDocumento[i]+temp
+       if(j++%3==0 && i-1>=0 )
+           temp= ','+temp
     }
     resultado += '$'+temp 
     importeDocumento = resultado.substring(resultado.length-21)
-    
-    return importeDocumento
-    }
-    //---------------------------------------------------------------------------------------------------
-    function saldo(dato){
-    return dato.substring(91,105)
-    }
-    
-    
-    function referencia(dato){
-    return dato.substring(105,113)
-    }
-    
-    function concepto(dato){
-    return dato.substring(113)
-    }
-    
-    function datosAdicionales(dato){
-    return dato.substring(154)
-    }
-    
-    function generarArchivoScotiaBank(nombreArchivo){
-    fs.appendFileSync(nombreArchivo,FIRSTLINE)
-    
-    datos.forEach(element => {
-    fs.appendFileSync(nombreArchivo,TIPO+'|'+contrato(element)+'|'+NOMBREPLAZA+' |'+NUMEROPLAZA+'|'+numeroSucursal(element)+'|'+
-    fecha(element)+'|'+fecha(element)+'|'+fecha(element)+'|'+indImporte(element)+'|'+
-    importeDocumento(element)+'|'+FORMADEPAGO+'| | '+INTERESESODESCUENTOS+'|'+
-    importeDocumento(element)+'|'+hora(element)+'|'+imp(element)+'|1000'+'noControl'+'referencia'+'|'+
-    fecha(element).replace(/\//g,'')+'|'+'Camberos Fregoso Valdez'+'|'+'Reinscripcion'+' ||'+'\n')
-    });
-    }
 
+    return importeDocumento
+    
+}
+
+function saldo(dato){
+    return dato.substring(91,105)
+}
+
+
+function referencia(dato){
+    return dato.substring(105,113)
+}
+
+function concepto(dato){
+    return dato.substring(113)
+}
+
+function datosAdicionales(dato){
+    return dato.substring(154)
+}
 
 module.exports.leerArchivo = leerArchivo;
 module.exports.generarArchivoScotiaBank= generarArchivoScotiaBank;
-
 
