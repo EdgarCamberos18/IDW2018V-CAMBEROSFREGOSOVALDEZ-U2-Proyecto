@@ -13,32 +13,70 @@ function leerArchivo(nombreArchivo) {
     var obj = fs.readFileSync(nombreArchivo, "utf8");
     var temp = ''
     for (i = 0; i < obj.length; i++) {
-        temp+=obj[i];
+        temp += obj[i];
     }
-    datos= temp.split(/\n/);
+    datos = temp.split(/\n/);
     return datos;
 }
 
 
 
-function contrato(dato){
-    return dato.substring(0,16).trim() 
+function contrato(dato) {
+    return dato.substring(0, 16).trim()
 }
 
-function fecha(dato){
-    return dato.substring(16,18)+'/'+dato.substring(18,20)+'/'+dato.substring(20,24);
+function fecha(dato) {
+    return dato.substring(16, 18) + '/' + dato.substring(18, 20) + '/' + dato.substring(20, 24);
 }
 
-function hora(dato){
-    return dato.substring(24,26)+":"+dato.substring(26,28);
+function hora(dato) {
+    return dato.substring(24, 26) + ":" + dato.substring(26, 28);
 }
 
-function numeroSucursal(dato){
-    return dato.substring(28,32);
+function numeroSucursal(dato) {
+    return dato.substring(28, 32);
 }
 
-function clacon(dato){
-    return dato.substring(32,36)
+function clacon(dato) {
+    return dato.substring(32, 36)
+}
+
+function descClacon(dato) {
+    return dato.substring(36, 72).trim()
+}
+
+function indImporte(dato) {
+    return dato.substring(72, 73)
+}
+
+function imp(dato) {
+    return '0' + dato.substring(74, 88)
+}
+
+function importeDocumento(dato) {
+    var resultado = ' '
+    var importeDocumento = ''
+    var bandera = false;
+    var importe = dato.substring(77, 88)
+    for (var i = 0; i < importe.length; i++) {
+        if (!(importe[i] == '0') && !bandera)
+            bandera = true
+        if (bandera) {
+            importeDocumento += importe.substring(i);
+            break
+        }
+    }
+    var temp = '.' + importeDocumento.substring(importeDocumento.length - 2)
+    var j = 1
+    for (var i = importeDocumento.length - 3; i >= 0; i--) {
+        temp = importeDocumento[i] + temp
+        if (j++ % 3 == 0 && i - 1 >= 0)
+            temp = ',' + temp
+    }
+    resultado += '$' + temp
+    importeDocumento = resultado.substring(resultado.length - 21)
+
+    return importeDocumento
 }
 
 
